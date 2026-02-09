@@ -1,10 +1,3 @@
-//
-//  _dayApp.swift
-//  7day
-//
-//  Created by Ryan Troxler on 2/8/26.
-//
-
 import SwiftUI
 import SwiftData
 
@@ -12,7 +5,8 @@ import SwiftData
 struct _dayApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            WeightEntry.self,
+            Block.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
