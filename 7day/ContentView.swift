@@ -11,7 +11,7 @@ struct ContentView: View {
                 ProgressTabView()
             }
             Tab("Plan", systemImage: "calendar") {
-                Text("Plan")
+                PlanView()
             }
             Tab("Import", systemImage: "square.and.arrow.down") {
                 Text("Import")

@@ -170,4 +170,52 @@ final class WeightViewModel {
         case .maintain: AppColors.maintain
         }
     }
+
+    // MARK: - Plan Tab Helpers
+
+    static func blockOverlaps(startDate: Date, weeks: Int, existingBlocks: [Block], excluding: Block? = nil) -> Bool {
+        let endDate = Calendar.mondayBased.date(byAdding: .day, value: (weeks * 7) - 1, to: startDate.startOfWeek)!
+        return existingBlocks.contains { block in
+            if let excluding, block.persistentModelID == excluding.persistentModelID { return false }
+            return startDate.startOfWeek <= block.endDate && endDate >= block.startDate
+        }
+    }
+
+    static func blockPreviewString(type: BlockType, startWeight: Double, rate: Double, weeks: Int) -> String {
+        let multiplier: Double = switch type {
+        case .cut: -1.0
+        case .bulk: 1.0
+        case .maintain: 0.0
+        }
+        let weeklyChange = startWeight * (rate / 100.0) * multiplier
+        let endWeight = startWeight + (weeklyChange * Double(weeks))
+        let totalChange = endWeight - startWeight
+        let sign = totalChange >= 0 ? "+" : ""
+        return "\(String(format: "%.1f", startWeight)) → \(String(format: "%.1f", endWeight)) lbs (\(sign)\(String(format: "%.1f", totalChange)) over \(weeks)wk)"
+    }
+
+    struct BlockWeekSummary: Identifiable {
+        let weekIndex: Int
+        let weekKey: WeekKey
+        let goal: Double
+        let actual: Double?
+        let entryCount: Int
+
+        var id: Int { weekIndex }
+    }
+
+    static func blockWeekSummaries(for block: Block, entries: [WeightEntry]) -> [BlockWeekSummary] {
+        (0..<block.weeks).map { i in
+            let monday = Calendar.mondayBased.date(byAdding: .day, value: i * 7, to: block.startDate)!
+            let weekKey = WeekKey(monday)
+            let avg = weekAverage(for: weekKey, from: entries)
+            return BlockWeekSummary(
+                weekIndex: i,
+                weekKey: weekKey,
+                goal: block.goalForWeek(i),
+                actual: avg?.average,
+                entryCount: avg?.count ?? 0
+            )
+        }
+    }
 }

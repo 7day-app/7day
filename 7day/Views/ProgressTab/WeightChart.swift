@@ -24,11 +24,13 @@ struct WeightChart: View {
 
     private var weekCount: Int { progressWeeks.count }
 
-    private var xStride: Calendar.Component { .weekOfYear }
+    private var xAxisByMonth: Bool { weekCount > 16 }
     private var xStrideCount: Int {
         if weekCount <= 8 { return 1 }
         if weekCount <= 16 { return 2 }
-        return 4
+        // month-based: 1 label per month for ≤6 months, per 2 months beyond that
+        if weekCount <= 26 { return 1 }
+        return 2
     }
 
     private var selectedProgressWeek: ProgressWeek? {
@@ -111,16 +113,25 @@ struct WeightChart: View {
             }
         }
         .chartYScale(domain: yDomain)
+        .chartPlotStyle { plotArea in
+            plotArea.clipped()
+        }
         .chartXSelection(value: $selectedWeek)
         .chartXAxis {
-            AxisMarks(values: .stride(by: xStride, count: xStrideCount)) { value in
+            AxisMarks(values: .stride(by: xAxisByMonth ? .month : .weekOfYear, count: xStrideCount)) { value in
                 AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5))
                     .foregroundStyle(AppColors.border)
                 AxisValueLabel {
                     if let date = value.as(Date.self) {
-                        Text(date, format: .dateTime.month(.abbreviated).day())
-                            .font(.system(size: 10, design: .rounded))
-                            .foregroundStyle(AppColors.textMuted)
+                        if xAxisByMonth {
+                            Text(date, format: .dateTime.month(.abbreviated))
+                                .font(.system(size: 10, design: .rounded))
+                                .foregroundStyle(AppColors.textMuted)
+                        } else {
+                            Text(date, format: .dateTime.month(.abbreviated).day())
+                                .font(.system(size: 10, design: .rounded))
+                                .foregroundStyle(AppColors.textMuted)
+                        }
                     }
                 }
             }
