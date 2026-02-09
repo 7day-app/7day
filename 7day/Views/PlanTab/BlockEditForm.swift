@@ -64,6 +64,7 @@ struct BlockEditForm: View {
                 .padding(.bottom, 32)
             }
             .background(AppColors.background)
+            .keyboardInput()
             .navigationTitle("Edit Block")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

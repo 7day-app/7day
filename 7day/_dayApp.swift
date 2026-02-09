@@ -19,7 +19,7 @@ struct _dayApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashView()
         }
         .modelContainer(sharedModelContainer)
     }

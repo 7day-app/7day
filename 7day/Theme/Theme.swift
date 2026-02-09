@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 // MARK: - Colors
 
@@ -95,6 +96,29 @@ struct SectionLabelStyle: ViewModifier {
     }
 }
 
+struct KeyboardInputModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .autocorrectionDisabled()
+            .textInputAutocapitalization(.never)
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button {
+                        UIApplication.shared.sendAction(
+                            #selector(UIResponder.resignFirstResponder),
+                            to: nil, from: nil, for: nil
+                        )
+                    } label: {
+                        Text("Done")
+                            .font(.system(.body, design: .rounded, weight: .semibold))
+                            .foregroundStyle(AppColors.accent)
+                    }
+                }
+            }
+    }
+}
+
 extension View {
     func cardStyle() -> some View {
         modifier(CardModifier())
@@ -102,6 +126,10 @@ extension View {
 
     func sectionLabel() -> some View {
         modifier(SectionLabelStyle())
+    }
+
+    func keyboardInput() -> some View {
+        modifier(KeyboardInputModifier())
     }
 }
 

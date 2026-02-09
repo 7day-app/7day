@@ -53,17 +53,21 @@ struct PlanView: View {
     // MARK: - Body
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                newBlockForm
-                blocksList
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 20) {
+                    newBlockForm
+                    blocksList
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
+                .padding(.bottom, 32)
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 8)
-            .padding(.bottom, 32)
+            .background(AppColors.background)
+            .scrollDismissesKeyboard(.interactively)
+            .keyboardInput()
+            .toolbar(.hidden, for: .navigationBar)
         }
-        .background(AppColors.background)
-        .scrollDismissesKeyboard(.interactively)
         .onAppear {
             prefillStartWeight()
             autoExpandActiveBlock()

@@ -14,7 +14,7 @@ struct ContentView: View {
                 PlanView()
             }
             Tab("Import", systemImage: "square.and.arrow.down") {
-                Text("Import")
+                ImportView()
             }
         }
         .tint(AppColors.accent)

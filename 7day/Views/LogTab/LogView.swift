@@ -29,19 +29,23 @@ struct LogView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                weightInputCard
-                weekSummary
-                vsLastWeek
-                recentEntriesSection
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 20) {
+                    weightInputCard
+                    weekSummary
+                    vsLastWeek
+                    recentEntriesSection
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
+                .padding(.bottom, 32)
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 8)
-            .padding(.bottom, 32)
+            .background(AppColors.background)
+            .scrollDismissesKeyboard(.interactively)
+            .keyboardInput()
+            .toolbar(.hidden, for: .navigationBar)
         }
-        .background(AppColors.background)
-        .scrollDismissesKeyboard(.interactively)
         .onAppear {
             isWeightFieldFocused = true
         }
@@ -214,6 +218,7 @@ struct LogView: View {
             }
             .padding(24)
             .background(AppColors.background)
+            .keyboardInput()
             .navigationTitle("Edit Entry")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
