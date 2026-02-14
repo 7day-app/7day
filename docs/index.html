@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7day — the weekly average is your true weight</title>
+    <meta name="description" content="7day is a minimalist iOS app for tracking your bodyweight. Log daily, see weekly averages, and track real trends.">
+    <link rel="icon" type="image/png" href="7day-logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #F5F5F3;
+            color: #2D2D2D;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 80px 0 48px;
+        }
+
+        .hero-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 28px;
+            margin-bottom: 32px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .hero .tagline {
+            font-size: 20px;
+            color: #7A7A7A;
+            font-weight: 400;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Cards */
+        .card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 32px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        .card h2 {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #AAAAAA;
+            margin-bottom: 20px;
+        }
+
+        .card p {
+            font-size: 17px;
+            color: #2D2D2D;
+            line-height: 1.7;
+        }
+
+        .card p + p {
+            margin-top: 12px;
+        }
+
+        /* Feature list */
+        .features {
+            list-style: none;
+        }
+
+        .features li {
+            font-size: 17px;
+            padding: 14px 0;
+            border-bottom: 1px solid #E4E4E0;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .features li:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .features li:first-child {
+            padding-top: 0;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #34D399;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 9px;
+        }
+
+        .features .label {
+            font-weight: 600;
+        }
+
+        .features .desc {
+            color: #7A7A7A;
+        }
+
+        /* Flow */
+        .flow {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .flow-num {
+            width: 32px;
+            height: 32px;
+            background: #34D399;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .flow-text {
+            font-size: 17px;
+            padding-top: 4px;
+        }
+
+        .flow-text strong {
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .flow-text span {
+            color: #7A7A7A;
+        }
+
+        /* CTA */
+        .cta {
+            text-align: center;
+            padding: 32px 0 0;
+        }
+
+        .cta p {
+            font-size: 15px;
+            color: #7A7A7A;
+        }
+
+        .badge {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 12px 28px;
+            background: #2D2D2D;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: opacity 0.15s;
+        }
+
+        .badge:hover {
+            opacity: 0.85;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 64px 0 48px;
+            color: #AAAAAA;
+            font-size: 13px;
+        }
+
+        footer a {
+            color: #7A7A7A;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #34D399;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 16px;
+        }
+
+        .swiftui-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #AAAAAA;
+            border: 1px solid #E4E4E0;
+            border-radius: 6px;
+            padding: 4px 10px;
+            margin-bottom: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .hero {
+                padding: 56px 0 36px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero .tagline {
+                font-size: 17px;
+            }
+
+            .hero-logo {
+                width: 96px;
+                height: 96px;
+                border-radius: 22px;
+            }
+
+            .card {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="hero">
+            <img src="7day-logo.png" alt="7day app icon" class="hero-logo">
+            <h1>7day</h1>
+            <p class="tagline">the weekly average is your true weight</p>
+        </section>
+
+        <div class="card">
+            <h2>What it does</h2>
+            <ul class="features">
+                <li>
+                    <div class="dot"></div>
+                    <div>
+                        <span class="label">Daily weigh-ins, weekly averages.</span>
+                        <span class="desc"> Your weight fluctuates day to day. 7day smooths the noise by calculating weekly averages so you can see what's actually happening.</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="dot"></div>
+                    <div>
+                        <span class="label">Plan your blocks.</span>
+                        <span class="desc"> Set up cutting, bulking, or maintenance cycles with goals. See at a glance whether you're on track each week.</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="dot"></div>
+                    <div>
+                        <span class="label">Track real trends.</span>
+                        <span class="desc"> Charts and weekly breakdowns show your progress over weeks and months, not daily noise.</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>How it works</h2>
+            <div class="flow">
+                <div class="flow-step">
+                    <div class="flow-num">1</div>
+                    <div class="flow-text">
+                        <strong>Step on the scale</strong>
+                        <span>Weigh yourself most mornings. Open 7day and log it in under 3 seconds.</span>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-num">2</div>
+                    <div class="flow-text">
+                        <strong>See your weekly average</strong>
+                        <span>The app calculates your Monday-to-Sunday average automatically. That number is your real weight.</span>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-num">3</div>
+                    <div class="flow-text">
+                        <strong>Watch the trend</strong>
+                        <span>Weekly averages plotted over time show the true direction. No more stressing over daily swings.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta">
+            <p>Coming soon to the App Store.</p>
+            <a href="https://github.com/7day-app/7day" class="badge">View on GitHub</a>
+        </div>
+
+        <footer>
+            <div class="footer-links">
+                <a href="https://github.com/7day-app/7day">GitHub</a>
+            </div>
+            <span class="swiftui-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                    <path d="M21.9 14.1c.1.5.1 1.1.1 1.6 0 4.1-2.5 7.3-6.4 7.3-1.2 0-2.2-.3-3.1-.8-.6-.3-1.4-.3-2 0-.9.5-1.9.8-3.1.8C3.5 23 1 19.8 1 15.7c0-.5 0-1.1.1-1.6C1.7 8.5 5.8 3.8 10.6 1.2c.4-.2.9-.2 1.3 0h0c.4.2.9.2 1.3 0 4.9 2.6 9 7.3 9.6 12.9h-.9z" fill="#34D399" opacity="0.2"/>
+                    <path d="M17.1 7.4c-3 2.2-5.7 5.3-7 8.7-.7-1.4-1.8-2.7-3.1-3.7" stroke="#34D399" stroke-width="2" stroke-linecap="round" fill="none"/>
+                </svg>
+                Built with SwiftUI
+            </span>
+            <div>&copy; 2025 7day</div>
+        </footer>
+    </div>
+</body>
+</html>
