@@ -3,6 +3,10 @@ import SwiftData
 
 @main
 struct _dayApp: App {
+    init() {
+        KeyboardDoneButton.install()
+    }
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             WeightEntry.self,
@@ -20,6 +24,7 @@ struct _dayApp: App {
     var body: some Scene {
         WindowGroup {
             SplashView()
+                .preferredColorScheme(.light)
         }
         .modelContainer(sharedModelContainer)
     }

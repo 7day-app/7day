@@ -21,21 +21,10 @@ struct SplashView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 28) {
-                // Logo mark — matches the SVG icon
-                HStack(alignment: .lastTextBaseline, spacing: 0) {
-                    Text("7")
-                        .font(.custom("Nunito-ExtraBold", size: 84))
-                        .foregroundStyle(AppColors.textPrimary)
-
-                    Text("d")
-                        .font(.custom("Nunito-ExtraBold", size: 84))
-                        .foregroundStyle(AppColors.textPrimary)
-
-                    Circle()
-                        .fill(AppColors.accent)
-                        .frame(width: 14, height: 14)
-                        .offset(y: -8)
-                }
+                Image("Logo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 140, height: 140)
                 .scaleEffect(logoScale)
                 .opacity(logoOpacity)
 

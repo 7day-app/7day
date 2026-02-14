@@ -6,13 +6,38 @@ struct WeightChart: View {
     let blocks: [Block]
     @Binding var selectedWeek: Date?
 
+    /// How many weeks ahead of today the chart should show.
+    private static let weeksAhead = 4
+
+    private var xDomain: ClosedRange<Date> {
+        let cal = Calendar.mondayBased
+        let today = Date().startOfWeek
+        let futureEnd = cal.date(byAdding: .day, value: Self.weeksAhead * 7, to: today)!
+
+        // Earliest date: earliest data point or earliest visible block start
+        var earliest = today
+        if let firstData = progressWeeks.first?.weekAverage.weekKey.monday {
+            earliest = min(earliest, firstData)
+        }
+        for block in blocks {
+            if block.startDate < futureEnd {
+                earliest = min(earliest, block.startDate)
+            }
+        }
+        return earliest...futureEnd
+    }
+
     private var yDomain: ClosedRange<Double> {
+        let visibleRange = xDomain
         var allValues: [Double] = progressWeeks.map(\.weekAverage.average)
         allValues.append(contentsOf: progressWeeks.compactMap(\.goal))
-        // Also include goal line endpoints from blocks
+        // Only include goal points that fall within the visible x range
         for block in blocks {
-            for i in 0...block.weeks {
-                allValues.append(block.goalForWeek(i))
+            for i in 0..<block.weeks {
+                let monday = Calendar.mondayBased.date(byAdding: .day, value: i * 7, to: block.startDate)!
+                if monday >= visibleRange.lowerBound && monday <= visibleRange.upperBound {
+                    allValues.append(block.goalForWeek(i))
+                }
             }
         }
         guard let lo = allValues.min(), let hi = allValues.max() else {
@@ -112,6 +137,7 @@ struct WeightChart: View {
                     .lineStyle(StrokeStyle(lineWidth: 1))
             }
         }
+        .chartXScale(domain: xDomain)
         .chartYScale(domain: yDomain)
         .chartPlotStyle { plotArea in
             plotArea.clipped()

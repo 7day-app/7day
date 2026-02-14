@@ -43,7 +43,6 @@ struct LogView: View {
             }
             .background(AppColors.background)
             .scrollDismissesKeyboard(.interactively)
-            .keyboardInput()
             .toolbar(.hidden, for: .navigationBar)
         }
         .onAppear {
@@ -218,7 +217,6 @@ struct LogView: View {
             }
             .padding(24)
             .background(AppColors.background)
-            .keyboardInput()
             .navigationTitle("Edit Entry")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

@@ -65,7 +65,6 @@ struct PlanView: View {
             }
             .background(AppColors.background)
             .scrollDismissesKeyboard(.interactively)
-            .keyboardInput()
             .toolbar(.hidden, for: .navigationBar)
         }
         .onAppear {

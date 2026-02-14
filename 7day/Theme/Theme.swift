@@ -96,26 +96,55 @@ struct SectionLabelStyle: ViewModifier {
     }
 }
 
-struct KeyboardInputModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .autocorrectionDisabled()
-            .textInputAutocapitalization(.never)
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button {
-                        UIApplication.shared.sendAction(
-                            #selector(UIResponder.resignFirstResponder),
-                            to: nil, from: nil, for: nil
-                        )
-                    } label: {
-                        Text("Done")
-                            .font(.system(.body, design: .rounded, weight: .semibold))
-                            .foregroundStyle(AppColors.accent)
-                    }
-                }
-            }
+// MARK: - Keyboard Done Button
+
+/// Call once at app startup. Attaches a "Done" toolbar to every UITextField
+/// and UITextView the moment it begins editing. Observers live forever.
+enum KeyboardDoneButton {
+    private static var observers: [Any] = []
+
+    static func install() {
+        guard observers.isEmpty else { return }
+        let tfObs = NotificationCenter.default.addObserver(
+            forName: UITextField.textDidBeginEditingNotification,
+            object: nil,
+            queue: .main
+        ) { notification in
+            guard let tf = notification.object as? UITextField,
+                  tf.inputAccessoryView == nil else { return }
+            tf.inputAccessoryView = makeDoneToolbar()
+            tf.reloadInputViews()
+        }
+        let tvObs = NotificationCenter.default.addObserver(
+            forName: UITextView.textDidBeginEditingNotification,
+            object: nil,
+            queue: .main
+        ) { notification in
+            guard let tv = notification.object as? UITextView,
+                  tv.inputAccessoryView == nil else { return }
+            tv.inputAccessoryView = makeDoneToolbar()
+            tv.reloadInputViews()
+        }
+        observers = [tfObs, tvObs]
+    }
+
+    private static func makeDoneToolbar() -> UIToolbar {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let flex = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let done = UIBarButtonItem(
+            title: "Done",
+            style: .plain,
+            target: nil,
+            action: #selector(UIResponder.resignFirstResponder)
+        )
+        let mint = UIColor(AppColors.accent)
+        done.setTitleTextAttributes([
+            .font: UIFont.systemFont(ofSize: 17, weight: .semibold),
+            .foregroundColor: mint
+        ], for: .normal)
+        toolbar.items = [flex, done]
+        return toolbar
     }
 }
 
@@ -128,9 +157,6 @@ extension View {
         modifier(SectionLabelStyle())
     }
 
-    func keyboardInput() -> some View {
-        modifier(KeyboardInputModifier())
-    }
 }
 
 // MARK: - Button Styles
