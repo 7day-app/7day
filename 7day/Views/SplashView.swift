@@ -29,9 +29,13 @@ struct SplashView: View {
                 .opacity(logoOpacity)
 
                 // Tagline
-                Text("the weekly average is your true weight")
-                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                (Text("Track the ")
                     .foregroundStyle(AppColors.textMuted)
+                + Text("trend")
+                    .foregroundStyle(AppColors.accent)
+                + Text(", not the day.")
+                    .foregroundStyle(AppColors.textMuted))
+                    .font(.system(size: 15, weight: .medium, design: .rounded))
                     .tracking(0.3)
                     .opacity(taglineOpacity)
             }
